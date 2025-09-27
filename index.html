@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Will You Forgive Me? 💌</title>
+  <title>Pamimo, Forgive Me?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -13,6 +13,7 @@
       background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
+      transition: background 1s;
     }
     .container {
       background: rgba(255,255,255,0.93);
@@ -23,6 +24,7 @@
       width: 100%;
       text-align: center;
       position: relative;
+      transition: background 1s;
     }
     .heart {
       font-size: 2.2em;
@@ -93,71 +95,90 @@
       min-height: 1.5em;
       letter-spacing: 0.02em;
     }
-    .sparkle {
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      top: -22px;
-      right: 22px;
-      font-size: 1.3em;
-      color: #f8b500;
-      animation: twinkle 1.6s infinite alternate;
-      pointer-events: none;
+    .cat-gif {
+      width: 220px;
+      height: auto;
+      border-radius: 16px;
+      margin: 1em 0 0.5em 0;
+      box-shadow: 0 4px 18px #fceabbaa;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
-    @keyframes twinkle {
-      from { opacity: 0.4; transform: rotate(0deg);}
-      to { opacity: 1; transform: rotate(25deg);}
+    .wink-kiss {
+      font-size: 2.4em;
+      display: inline-block;
+      opacity: 0;
+      transition: opacity 0.2s;
+      margin-left: 0.3em;
+    }
+    .show {
+      opacity: 1;
+      animation: wink 0.6s, kiss 1.3s 0.6s;
+    }
+    @keyframes wink {
+      0%   { transform: scale(1) rotate(0deg);}
+      45%  { transform: scale(1.18) rotate(-10deg);}
+      55%  { transform: scale(1.18) rotate(-10deg);}
+      100% { transform: scale(1) rotate(0deg);}
+    }
+    @keyframes kiss {
+      0%   { color: #ff5e62; }
+      100% { color: #f8b500; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="sparkle">✨</div>
+  <div class="container" id="main-container">
     <div class="heart">❤️</div>
-    <h2>My Sweetheart,</h2>
+    <h2>Pamimo,</h2>
     <p>
-      I’m so sorry for hurting you.<br>
-      I miss your smile, your laugh, your warmth.<br>
-      My world just isn’t the same without you.<br>
-      Will you forgive me, and let me hold you close again? 🌹
+      I'm sorry for making you feel uncomfortable.<br>
+      Will you forgive me? 🥺
     </p>
-    <div class="buttons">
-      <button class="yes" onclick="forgiveMe()">Yes, I forgive you 💖</button>
+    <div class="buttons" id="btns">
+      <button class="yes" onclick="forgiveMe()">Yes</button>
       <button class="no" id="noBtn">No</button>
     </div>
     <div id="response"></div>
   </div>
   <script>
-    // The "No" button will avoid the user's mouse!
+    // "No" button escapes infinitely
     const noBtn = document.getElementById('noBtn');
     const buttonsDiv = document.querySelector('.buttons');
     noBtn.addEventListener('mouseenter', moveNoBtn);
     noBtn.addEventListener('mousedown', moveNoBtn);
-    let moveCount = 0;
     function moveNoBtn() {
       const btn = noBtn;
       const parent = buttonsDiv;
-      const parentRect = parent.getBoundingClientRect();
-      const btnRect = btn.getBoundingClientRect();
-      // Parent relative positions
       let maxX = parent.offsetWidth - btn.offsetWidth;
       let maxY = parent.offsetHeight - btn.offsetHeight;
       let randX = Math.random() * maxX;
       let randY = Math.random() * maxY;
-      // Prevent from jumping too close to the Yes button
       if (randX < 90) randX += 85;
       btn.style.left = randX + "px";
       btn.style.top = randY + "px";
-      moveCount++;
-      if (moveCount > 5) {
-        btn.textContent = "You know you want to say Yes! 😘";
-      }
     }
+
+    // "Yes" button: show new message, cat gif, and wink-then-kiss
     function forgiveMe() {
-      document.getElementById('response').textContent = "Yaaay! Thank you, my love! I promise to make you smile always 💑✨";
-      document.querySelector('.yes').disabled = true;
-      noBtn.style.display = 'none';
-      document.querySelector('.heart').textContent = '💞';
+      document.body.style.background = "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)";
+      const container = document.getElementById('main-container');
+      container.innerHTML = `
+        <div class="heart">❤️</div>
+        <h2>I knew you would forgive <span class="wink-kiss" id="winkKiss">😉</span><span class="wink-kiss" id="kiss" style="margin-left:0.1em;">😘</span></h2>
+        <img class="cat-gif" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="Cute Cat">
+        <div id="response" style="color:#f8b500; font-size:1.3em; margin-top:1em;">❤️</div>
+      `;
+
+      // Wink then Kiss animation
+      setTimeout(() => {
+        document.getElementById('winkKiss').classList.add('show');
+        setTimeout(() => {
+          document.getElementById('winkKiss').classList.remove('show');
+          document.getElementById('kiss').classList.add('show');
+        }, 700);
+      }, 600);
     }
   </script>
 </body>
